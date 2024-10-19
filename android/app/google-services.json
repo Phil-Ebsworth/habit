@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "100196825462",
+    "project_id": "habits-eef1f",
+    "storage_bucket": "habits-eef1f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:100196825462:android:0227716ab47fd958d36257",
+        "android_client_info": {
+          "package_name": "com.example.twitter_copycat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHyPRaa7uBnZzpRvKOh-TpE9W2XkMpvGY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:100196825462:android:db7888c93520b6bed36257",
+        "android_client_info": {
+          "package_name": "com.firebase_login"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHyPRaa7uBnZzpRvKOh-TpE9W2XkMpvGY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:100196825462:android:1f83ad140e48b292d36257",
+        "android_client_info": {
+          "package_name": "com.habit"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHyPRaa7uBnZzpRvKOh-TpE9W2XkMpvGY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
