@@ -1,14 +1,16 @@
 class Habit {
-  final String id; // Firestore benötigt eine ID
+  final String id;
   final String name;
   final DateTime startDate;
-  List<bool> completionStatus;
+  final List<bool> completionStatus;
+  int relapseCount; // Neues Feld für die Anzahl der Rückfälle
 
   Habit({
     required this.id,
     required this.name,
     required this.startDate,
     required this.completionStatus,
+    this.relapseCount = 0, // Standardmäßig 0 Rückfälle
   });
 
   // Firestore speichert Daten als Map
@@ -17,6 +19,7 @@ class Habit {
       'name': name,
       'startDate': startDate.toIso8601String(),
       'completionStatus': completionStatus.map((e) => e ? 1 : 0).toList(),
+      'relapseCount': relapseCount, // Rückfälle speichern
     };
   }
 
@@ -28,6 +31,8 @@ class Habit {
       startDate: DateTime.parse(map['startDate']),
       completionStatus: List<bool>.from(
           map['completionStatus'].map((e) => e == 1 ? true : false)),
+      relapseCount:
+          map['relapseCount'] ?? 0, // Standardmäßig 0, falls nicht vorhanden
     );
   }
 }

@@ -7,7 +7,6 @@ class HabitBloc extends Bloc<HabitEvent, HabitState> {
   final HabitRepository habitRepository;
 
   HabitBloc(this.habitRepository) : super(HabitsLoading()) {
-    // Auf Firestore-Änderungen hören und den Zustand aktualisieren
     on<LoadHabits>((event, emit) async {
       emit(HabitsLoading());
       try {
@@ -19,7 +18,6 @@ class HabitBloc extends Bloc<HabitEvent, HabitState> {
       }
     });
 
-    // Aktualisiert die Habits-Liste dynamisch bei Änderungen
     on<UpdateHabits>((event, emit) {
       emit(HabitsLoaded(event.habits));
     });
