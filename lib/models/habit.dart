@@ -3,27 +3,28 @@ class Habit {
   final String name;
   final DateTime startDate;
   final List<bool> completionStatus;
-  int relapseCount; // Neues Feld für die Anzahl der Rückfälle
+  final bool isPositive; // Neues Feld für positive oder negative Gewohnheiten
+  int relapseCount;
 
   Habit({
     required this.id,
     required this.name,
     required this.startDate,
     required this.completionStatus,
-    this.relapseCount = 0, // Standardmäßig 0 Rückfälle
+    required this.isPositive, // Muss jetzt beim Erstellen angegeben werden
+    this.relapseCount = 0,
   });
 
-  // Firestore speichert Daten als Map
   Map<String, dynamic> toMap() {
     return {
       'name': name,
       'startDate': startDate.toIso8601String(),
       'completionStatus': completionStatus.map((e) => e ? 1 : 0).toList(),
-      'relapseCount': relapseCount, // Rückfälle speichern
+      'isPositive': isPositive, // Speichert, ob die Gewohnheit positiv ist
+      'relapseCount': relapseCount,
     };
   }
 
-  // Erstellt ein Habit-Objekt aus einem Firestore-Dokument
   static Habit fromMap(String id, Map<String, dynamic> map) {
     return Habit(
       id: id,
@@ -31,8 +32,9 @@ class Habit {
       startDate: DateTime.parse(map['startDate']),
       completionStatus: List<bool>.from(
           map['completionStatus'].map((e) => e == 1 ? true : false)),
-      relapseCount:
-          map['relapseCount'] ?? 0, // Standardmäßig 0, falls nicht vorhanden
+      isPositive:
+          map['isPositive'] ?? true, // Standardmäßig positive Gewohnheit
+      relapseCount: map['relapseCount'] ?? 0,
     );
   }
 }

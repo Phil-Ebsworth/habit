@@ -4,9 +4,15 @@ import '../models/habit.dart';
 import '../bloc/habit_bloc.dart';
 import '../bloc/habit_event.dart';
 
-class AddHabitScreen extends StatelessWidget {
+class AddHabitScreen extends StatefulWidget {
+  @override
+  _AddHabitScreenState createState() => _AddHabitScreenState();
+}
+
+class _AddHabitScreenState extends State<AddHabitScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
+  bool _isPositive = true; // Standardmäßig positive Gewohnheit
 
   @override
   Widget build(BuildContext context) {
@@ -31,19 +37,38 @@ class AddHabitScreen extends StatelessWidget {
                 },
               ),
               SizedBox(height: 20),
+              // Auswahlfeld für positive oder negative Gewohnheit
+              Row(
+                children: [
+                  Text('Type: '),
+                  DropdownButton<bool>(
+                    value: _isPositive,
+                    items: [
+                      DropdownMenuItem(value: true, child: Text('Learn')),
+                      DropdownMenuItem(value: false, child: Text('Unlearn')),
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        _isPositive = value!;
+                      });
+                    },
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    // Ein neues Habit-Objekt erstellen
+                    // Neues Habit erstellen
                     Habit newHabit = Habit(
-                      id: '', // Firestore erstellt die ID
+                      id: '',
                       name: _nameController.text,
                       startDate: DateTime.now(),
                       completionStatus: [],
+                      isPositive: _isPositive, // Gewohnheitstyp
                     );
-                    // Das AddHabit-Event an den BLoC senden
+                    // Event zum Hinzufügen der Gewohnheit senden
                     context.read<HabitBloc>().add(AddHabit(newHabit));
-                    // Zurück zum Home-Screen navigieren
                     Navigator.pop(context);
                   }
                 },

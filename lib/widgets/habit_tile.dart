@@ -32,6 +32,8 @@ class HabitTile extends StatelessWidget {
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text(
+              'Type: ${habit.isPositive ? 'Learn' : 'Unlearn'}'), // Gewohnheitstyp anzeigen
           Text('Started: ${DateFormat.yMMMd().format(habit.startDate)}'),
           Text(
               'Elapsed time: ${calculateTimeSinceStart(habit.startDate)}'), // Verstrichene Zeit anzeigen
@@ -42,35 +44,38 @@ class HabitTile extends StatelessWidget {
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
+          // Reset-Button: Startdatum zurücksetzen (für positive und negative Gewohnheiten)
           IconButton(
             icon: Icon(Icons.refresh),
             onPressed: () {
-              // Reset-Button: Startdatum auf aktuelles Datum setzen
               final updatedHabit = Habit(
                 id: habit.id,
                 name: habit.name,
                 startDate: DateTime.now(),
                 completionStatus: habit.completionStatus,
-                relapseCount:
-                    habit.relapseCount, // Rückfälle bleiben unverändert
+                isPositive: habit.isPositive, // Gewohnheitstyp bleibt gleich
+                relapseCount: habit.relapseCount, // Rückfälle bleiben gleich
               );
               context.read<HabitBloc>().add(UpdateHabit(updatedHabit));
             },
           ),
-          IconButton(
-            icon: Icon(Icons.replay),
-            onPressed: () {
-              // Rückfall-Button: Rückfälle um 1 erhöhen und Startdatum auf aktuelles Datum setzen
-              final updatedHabit = Habit(
-                id: habit.id,
-                name: habit.name,
-                startDate: DateTime.now(),
-                completionStatus: habit.completionStatus,
-                relapseCount: habit.relapseCount + 1, // Rückfälle um 1 erhöhen
-              );
-              context.read<HabitBloc>().add(UpdateHabit(updatedHabit));
-            },
-          ),
+          // Rückfall-Button: Rückfall nur für positive Gewohnheiten anzeigen
+          if (habit.isPositive) // Nur für positive Gewohnheiten anzeigen
+            IconButton(
+              icon: Icon(Icons.replay),
+              onPressed: () {
+                final updatedHabit = Habit(
+                  id: habit.id,
+                  name: habit.name,
+                  startDate: DateTime.now(),
+                  completionStatus: habit.completionStatus,
+                  isPositive: habit.isPositive,
+                  relapseCount:
+                      habit.relapseCount + 1, // Rückfälle um 1 erhöhen
+                );
+                context.read<HabitBloc>().add(UpdateHabit(updatedHabit));
+              },
+            ),
           IconButton(
             icon: Icon(Icons.delete),
             onPressed: () {
