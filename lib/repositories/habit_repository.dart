@@ -5,17 +5,18 @@ class HabitRepository {
   final CollectionReference habitsCollection =
       FirebaseFirestore.instance.collection('habits');
 
+  // Stream für Echtzeit-Updates der Habits aus Firestore
+  Stream<List<Habit>> habitsStream() {
+    return habitsCollection.snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        return Habit.fromMap(doc.id, doc.data() as Map<String, dynamic>);
+      }).toList();
+    });
+  }
+
   // Habit hinzufügen
   Future<void> addHabit(Habit habit) async {
     await habitsCollection.add(habit.toMap());
-  }
-
-  // Alle Habits laden
-  Future<List<Habit>> getHabits() async {
-    QuerySnapshot snapshot = await habitsCollection.get();
-    return snapshot.docs
-        .map((doc) => Habit.fromMap(doc.id, doc.data() as Map<String, dynamic>))
-        .toList();
   }
 
   // Habit aktualisieren

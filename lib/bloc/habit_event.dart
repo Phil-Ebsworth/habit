@@ -31,3 +31,12 @@ class DeleteHabit extends HabitEvent {
   @override
   List<Object?> get props => [habitId];
 }
+
+// Neues Event für dynamische Updates
+class UpdateHabits extends HabitEvent {
+  final List<Habit> habits;
+  UpdateHabits(this.habits);
+
+  @override
+  List<Object?> get props => [habits];
+}

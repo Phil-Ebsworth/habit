@@ -8,13 +8,11 @@ class AddHabitScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
 
-  AddHabitScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Habit'),
+        title: Text('Add Habit'),
       ),
       body: Form(
         key: _formKey,
@@ -24,7 +22,7 @@ class AddHabitScreen extends StatelessWidget {
             children: [
               TextFormField(
                 controller: _nameController,
-                decoration: const InputDecoration(labelText: 'Habit Name'),
+                decoration: InputDecoration(labelText: 'Habit Name'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a habit name';
@@ -32,21 +30,24 @@ class AddHabitScreen extends StatelessWidget {
                   return null;
                 },
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
+                    // Ein neues Habit-Objekt erstellen
                     Habit newHabit = Habit(
-                      id: '', // Firestore wird die ID generieren
+                      id: '', // Firestore erstellt die ID
                       name: _nameController.text,
                       startDate: DateTime.now(),
                       completionStatus: [],
                     );
+                    // Das AddHabit-Event an den BLoC senden
                     context.read<HabitBloc>().add(AddHabit(newHabit));
+                    // Zurück zum Home-Screen navigieren
                     Navigator.pop(context);
                   }
                 },
-                child: const Text('Add Habit'),
+                child: Text('Add Habit'),
               ),
             ],
           ),

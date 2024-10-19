@@ -1,23 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../bloc/habit_bloc.dart';
-import '../bloc/habit_event.dart';
-import '../bloc/habit_state.dart';
+import '../bloc/habit_bloc.dart'; // blocs -> bloc
+import '../bloc/habit_event.dart'; // blocs -> bloc
+import '../bloc/habit_state.dart'; // blocs -> bloc
 import '../widgets/habit_tile.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Habit Tracker'),
+        title: Text('Habit Tracker'),
       ),
       body: BlocBuilder<HabitBloc, HabitState>(
         builder: (context, state) {
           if (state is HabitsLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return Center(child: CircularProgressIndicator());
           } else if (state is HabitsLoaded) {
             return ListView.builder(
               itemCount: state.habits.length,
@@ -26,7 +24,7 @@ class HomeScreen extends StatelessWidget {
               },
             );
           } else if (state is HabitsError) {
-            return const Center(child: Text('Failed to load habits.'));
+            return Center(child: Text('Failed to load habits.'));
           }
           return Container();
         },
@@ -35,7 +33,7 @@ class HomeScreen extends StatelessWidget {
         onPressed: () {
           Navigator.pushNamed(context, '/add');
         },
-        child: const Icon(Icons.add),
+        child: Icon(Icons.add),
       ),
     );
   }

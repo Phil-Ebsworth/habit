@@ -7,7 +7,7 @@ import '../bloc/habit_event.dart';
 class HabitTile extends StatelessWidget {
   final Habit habit;
 
-  const HabitTile({super.key, required this.habit});
+  HabitTile({required this.habit});
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +15,9 @@ class HabitTile extends StatelessWidget {
       title: Text(habit.name),
       subtitle: Text('Started: ${habit.startDate.toString()}'),
       trailing: IconButton(
-        icon: const Icon(Icons.delete),
+        icon: Icon(Icons.delete),
         onPressed: () {
+          // Lösche das Habit und aktualisiere die Liste
           context.read<HabitBloc>().add(DeleteHabit(habit.id));
         },
       ),

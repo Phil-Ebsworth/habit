@@ -7,20 +7,26 @@ class HabitBloc extends Bloc<HabitEvent, HabitState> {
   final HabitRepository habitRepository;
 
   HabitBloc(this.habitRepository) : super(HabitsLoading()) {
+    // Auf Firestore-Änderungen hören und den Zustand aktualisieren
     on<LoadHabits>((event, emit) async {
       emit(HabitsLoading());
       try {
-        final habits = await habitRepository.getHabits();
-        emit(HabitsLoaded(habits));
+        habitRepository.habitsStream().listen((habits) {
+          add(UpdateHabits(habits));
+        });
       } catch (_) {
         emit(HabitsError());
       }
     });
 
+    // Aktualisiert die Habits-Liste dynamisch bei Änderungen
+    on<UpdateHabits>((event, emit) {
+      emit(HabitsLoaded(event.habits));
+    });
+
     on<AddHabit>((event, emit) async {
       try {
         await habitRepository.addHabit(event.habit);
-        add(LoadHabits());
       } catch (_) {
         emit(HabitsError());
       }
@@ -29,7 +35,6 @@ class HabitBloc extends Bloc<HabitEvent, HabitState> {
     on<UpdateHabit>((event, emit) async {
       try {
         await habitRepository.updateHabit(event.habit);
-        add(LoadHabits());
       } catch (_) {
         emit(HabitsError());
       }
@@ -38,7 +43,6 @@ class HabitBloc extends Bloc<HabitEvent, HabitState> {
     on<DeleteHabit>((event, emit) async {
       try {
         await habitRepository.deleteHabit(event.habitId);
-        add(LoadHabits());
       } catch (_) {
         emit(HabitsError());
       }
