@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'bloc/habit_bloc.dart';
-import 'bloc/navigation_bloc.dart'; // Importiere den Navigation BLoC
+import 'bloc/navigation_bloc.dart';
 import 'bloc/habit_event.dart';
 import 'repositories/habit_repository.dart';
-import 'screens/habit_navigation_screen.dart'; // Importiere die BLoC-basierte Navigation
+import 'screens/habit_navigation_screen.dart';
 import 'screens/add_habit_screen.dart';
 
 void main() async {
@@ -33,8 +33,9 @@ class HabitTrackerApp extends StatelessWidget {
         initialRoute: '/',
         routes: {
           '/': (context) =>
-              HabitNavigationScreen(), // Neue Startseite mit BLoC-Navigation
+              HabitNavigationScreen(), // Startbildschirm mit BLoC-Navigation
           '/add': (context) => AddHabitScreen(),
+          // Für den Bearbeitungsbildschirm navigieren wir direkt mit Navigator.push(), deshalb keine Route hier
         },
       ),
     );

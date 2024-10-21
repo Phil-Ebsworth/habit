@@ -3,7 +3,8 @@ import '../models/habit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/habit_bloc.dart';
 import '../bloc/habit_event.dart';
-import 'package:intl/intl.dart'; // Für die Formatierung des Datums
+import 'package:intl/intl.dart';
+import '../screens/edit_habit_screen.dart';
 
 class HabitTile extends StatelessWidget {
   final Habit habit;
@@ -32,50 +33,52 @@ class HabitTile extends StatelessWidget {
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-              'Type: ${habit.isPositive ? 'Learn' : 'Unlearn'}'), // Gewohnheitstyp anzeigen
+          Text('Type: ${habit.isPositive ? 'Learn' : 'Unlearn'}'),
           Text('Started: ${DateFormat.yMMMd().format(habit.startDate)}'),
-          Text(
-              'Elapsed time: ${calculateTimeSinceStart(habit.startDate)}'), // Verstrichene Zeit anzeigen
-          Text(
-              'Relapses: ${habit.relapseCount}'), // Anzahl der Rückfälle anzeigen
+          Text('Elapsed time: ${calculateTimeSinceStart(habit.startDate)}'),
+          Text('Relapses: ${habit.relapseCount}'),
         ],
       ),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Reset-Button: Startdatum zurücksetzen (für positive und negative Gewohnheiten)
+          // Erledigt-Button: Markiert das Habit für den Tag als abgeschlossen
           IconButton(
-            icon: Icon(Icons.refresh),
+            icon: Icon(Icons.check_circle, color: Colors.green),
             onPressed: () {
+              final updatedCompletionStatus =
+                  List<bool>.from(habit.completionStatus);
+              updatedCompletionStatus
+                  .add(true); // Füge einen "erledigt"-Tag hinzu
+
               final updatedHabit = Habit(
                 id: habit.id,
                 name: habit.name,
-                startDate: DateTime.now(),
-                completionStatus: habit.completionStatus,
-                isPositive: habit.isPositive, // Gewohnheitstyp bleibt gleich
-                relapseCount: habit.relapseCount, // Rückfälle bleiben gleich
+                startDate: habit.startDate,
+                completionStatus: updatedCompletionStatus,
+                isPositive: habit.isPositive,
+                relapseCount: habit.relapseCount,
               );
               context.read<HabitBloc>().add(UpdateHabit(updatedHabit));
             },
           ),
-          // Rückfall-Button: Rückfall nur für positive Gewohnheiten anzeigen
-          if (habit.isPositive) // Nur für positive Gewohnheiten anzeigen
-            IconButton(
-              icon: Icon(Icons.replay),
-              onPressed: () {
-                final updatedHabit = Habit(
-                  id: habit.id,
-                  name: habit.name,
-                  startDate: DateTime.now(),
-                  completionStatus: habit.completionStatus,
-                  isPositive: habit.isPositive,
-                  relapseCount:
-                      habit.relapseCount + 1, // Rückfälle um 1 erhöhen
-                );
-                context.read<HabitBloc>().add(UpdateHabit(updatedHabit));
-              },
-            ),
+          // Rückfall-Button: Erhöht die Rückfallanzahl
+          IconButton(
+            icon: Icon(Icons.replay, color: Colors.red),
+            onPressed: () {
+              final updatedHabit = Habit(
+                id: habit.id,
+                name: habit.name,
+                startDate: habit.startDate,
+                completionStatus: habit.completionStatus,
+                isPositive: habit.isPositive,
+                relapseCount:
+                    habit.relapseCount + 1, // Erhöht die Rückfälle um 1
+              );
+              context.read<HabitBloc>().add(UpdateHabit(updatedHabit));
+            },
+          ),
+          // Löschen-Button: Löscht das Habit
           IconButton(
             icon: Icon(Icons.delete),
             onPressed: () {
@@ -84,6 +87,15 @@ class HabitTile extends StatelessWidget {
           ),
         ],
       ),
+      onTap: () {
+        // Beim Klicken auf das Habit zur Bearbeitungsseite navigieren
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EditHabitScreen(habit: habit),
+          ),
+        );
+      },
     );
   }
 }

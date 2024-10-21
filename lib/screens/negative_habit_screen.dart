@@ -6,16 +6,18 @@ import '../bloc/habit_state.dart';
 import '../widgets/habit_tile.dart';
 
 class NegativeHabitsScreen extends StatelessWidget {
+  const NegativeHabitsScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Negative Habits'),
+        title: const Text('Negative Habits'),
       ),
       body: BlocBuilder<HabitBloc, HabitState>(
         builder: (context, state) {
           if (state is HabitsLoading) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (state is HabitsLoaded) {
             // Nur negative Gewohnheiten anzeigen
             final negativeHabits =
@@ -27,7 +29,7 @@ class NegativeHabitsScreen extends StatelessWidget {
               },
             );
           } else if (state is HabitsError) {
-            return Center(child: Text('Failed to load habits.'));
+            return const Center(child: Text('Failed to load habits.'));
           }
           return Container();
         },

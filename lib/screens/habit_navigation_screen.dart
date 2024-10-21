@@ -7,19 +7,21 @@ import 'positive_habit_screen.dart';
 import 'negative_habit_screen.dart';
 
 class HabitNavigationScreen extends StatelessWidget {
-  static List<Widget> _widgetOptions = <Widget>[
+  static final List<Widget> _widgetOptions = <Widget>[
     PositiveHabitsScreen(), // Bildschirm für positive Gewohnheiten
     NegativeHabitsScreen(), // Bildschirm für negative Gewohnheiten
   ];
+
+  const HabitNavigationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Habit Tracker'),
+        title: const Text('Habit Tracker'),
         actions: [
           IconButton(
-            icon: Icon(Icons.add),
+            icon: const Icon(Icons.add),
             onPressed: () {
               Navigator.pushNamed(context, '/add');
             },

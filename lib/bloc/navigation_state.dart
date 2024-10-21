@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 class NavigationState extends Equatable {
   final int selectedTabIndex;
 
-  NavigationState({required this.selectedTabIndex});
+  const NavigationState({required this.selectedTabIndex});
 
   factory NavigationState.initial() {
     return NavigationState(

@@ -6,16 +6,18 @@ import '../bloc/habit_state.dart'; // blocs -> bloc
 import '../widgets/habit_tile.dart';
 
 class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Habit Tracker'),
+        title: const Text('Habit Tracker'),
       ),
       body: BlocBuilder<HabitBloc, HabitState>(
         builder: (context, state) {
           if (state is HabitsLoading) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (state is HabitsLoaded) {
             return ListView.builder(
               itemCount: state.habits.length,
@@ -24,7 +26,7 @@ class HomeScreen extends StatelessWidget {
               },
             );
           } else if (state is HabitsError) {
-            return Center(child: Text('Failed to load habits.'));
+            return const Center(child: Text('Failed to load habits.'));
           }
           return Container();
         },
@@ -33,7 +35,7 @@ class HomeScreen extends StatelessWidget {
         onPressed: () {
           Navigator.pushNamed(context, '/add');
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }

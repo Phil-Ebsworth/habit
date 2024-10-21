@@ -1,26 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import '../models/habit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/habit_bloc.dart';
 import '../bloc/habit_event.dart';
 
-class AddHabitScreen extends StatefulWidget {
-  const AddHabitScreen({super.key});
+class EditHabitScreen extends StatefulWidget {
+  final Habit habit;
+
+  EditHabitScreen({required this.habit});
 
   @override
-  _AddHabitScreenState createState() => _AddHabitScreenState();
+  _EditHabitScreenState createState() => _EditHabitScreenState();
 }
 
-class _AddHabitScreenState extends State<AddHabitScreen> {
+class _EditHabitScreenState extends State<EditHabitScreen> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _nameController = TextEditingController();
-  bool _isPositive = true; // Standardmäßig positive Gewohnheit
+  late TextEditingController _nameController;
+  late bool _isPositive;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController = TextEditingController(text: widget.habit.name);
+    _isPositive = widget.habit.isPositive;
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Habit'),
+        title: Text('Edit Habit'),
       ),
       body: Form(
         key: _formKey,
@@ -30,7 +45,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
             children: [
               TextFormField(
                 controller: _nameController,
-                decoration: const InputDecoration(labelText: 'Habit Name'),
+                decoration: InputDecoration(labelText: 'Habit Name'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a habit name';
@@ -38,14 +53,14 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                   return null;
                 },
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               // Auswahlfeld für positive oder negative Gewohnheit
               Row(
                 children: [
-                  const Text('Type: '),
+                  Text('Type: '),
                   DropdownButton<bool>(
                     value: _isPositive,
-                    items: const [
+                    items: [
                       DropdownMenuItem(value: true, child: Text('Learn')),
                       DropdownMenuItem(value: false, child: Text('Unlearn')),
                     ],
@@ -57,24 +72,25 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    // Neues Habit erstellen
-                    Habit newHabit = Habit(
-                      id: '',
+                    // Aktuelles Habit mit den geänderten Werten aktualisieren
+                    final updatedHabit = Habit(
+                      id: widget.habit.id,
                       name: _nameController.text,
-                      startDate: DateTime.now(),
-                      completionStatus: [],
-                      isPositive: _isPositive, // Gewohnheitstyp
+                      startDate: widget.habit.startDate,
+                      completionStatus: widget.habit.completionStatus,
+                      isPositive: _isPositive,
+                      relapseCount: widget.habit.relapseCount,
                     );
-                    // Event zum Hinzufügen der Gewohnheit senden
-                    context.read<HabitBloc>().add(AddHabit(newHabit));
-                    Navigator.pop(context);
+                    // Event zum Aktualisieren des Habits senden
+                    context.read<HabitBloc>().add(UpdateHabit(updatedHabit));
+                    Navigator.pop(context); // Zurück zum vorherigen Bildschirm
                   }
                 },
-                child: const Text('Add Habit'),
+                child: Text('Save Changes'),
               ),
             ],
           ),
