@@ -17,12 +17,14 @@ class _EditHabitScreenState extends State<EditHabitScreen> {
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _nameController;
   late bool _isPositive;
+  late String _habit_id;
 
   @override
   void initState() {
     super.initState();
     _nameController = TextEditingController(text: widget.habit.name);
     _isPositive = widget.habit.isPositive;
+    _habit_id = widget.habit.id;
   }
 
   @override
@@ -35,7 +37,16 @@ class _EditHabitScreenState extends State<EditHabitScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Habit'),
+        title: const Text('Edit Habit'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.delete),
+            onPressed: () {
+              context.read<HabitBloc>().add(DeleteHabit(_habit_id));
+              Navigator.pop(context);
+            },
+          ),
+        ],
       ),
       body: Form(
         key: _formKey,

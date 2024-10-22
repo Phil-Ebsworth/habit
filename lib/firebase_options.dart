@@ -41,49 +41,49 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAizYrm-qLa2QnaKoult3fWlOAcVKRwDwg',
-    appId: '1:100196825462:web:feb23e14af9e4028d36257',
-    messagingSenderId: '100196825462',
-    projectId: 'habits-eef1f',
-    authDomain: 'habits-eef1f.firebaseapp.com',
-    storageBucket: 'habits-eef1f.appspot.com',
-    measurementId: 'G-LS4LL8ZGNH',
+    apiKey: 'AIzaSyD4hgcztK4Ssg25Md8q0aVFbWocj-MJG3s',
+    appId: '1:356091070795:web:493d911daf5b8f600fc0ce',
+    messagingSenderId: '356091070795',
+    projectId: 'habittracker-252d2',
+    authDomain: 'habittracker-252d2.firebaseapp.com',
+    storageBucket: 'habittracker-252d2.appspot.com',
+    measurementId: 'G-LM7GV5W0HN',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDHyPRaa7uBnZzpRvKOh-TpE9W2XkMpvGY',
-    appId: '1:100196825462:android:1f83ad140e48b292d36257',
-    messagingSenderId: '100196825462',
-    projectId: 'habits-eef1f',
-    storageBucket: 'habits-eef1f.appspot.com',
+    apiKey: 'AIzaSyDRNhXtg2zujwSwwxSnSFg9iXCbWCIx74E',
+    appId: '1:356091070795:android:b1ede24f6849a89d0fc0ce',
+    messagingSenderId: '356091070795',
+    projectId: 'habittracker-252d2',
+    storageBucket: 'habittracker-252d2.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCDxfAqgTQ3hFeMmHOxG168fs8wIEOWjNw',
-    appId: '1:100196825462:ios:57bb6a963aeea043d36257',
-    messagingSenderId: '100196825462',
-    projectId: 'habits-eef1f',
-    storageBucket: 'habits-eef1f.appspot.com',
+    apiKey: 'AIzaSyBRBsA2gqF7-JkBOYZcFm66fiK0S9ZeoSc',
+    appId: '1:356091070795:ios:8c4611a0130eeba90fc0ce',
+    messagingSenderId: '356091070795',
+    projectId: 'habittracker-252d2',
+    storageBucket: 'habittracker-252d2.appspot.com',
     iosBundleId: 'com.example.habitTracker',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyCDxfAqgTQ3hFeMmHOxG168fs8wIEOWjNw',
-    appId: '1:100196825462:ios:57bb6a963aeea043d36257',
-    messagingSenderId: '100196825462',
-    projectId: 'habits-eef1f',
-    storageBucket: 'habits-eef1f.appspot.com',
+    apiKey: 'AIzaSyBRBsA2gqF7-JkBOYZcFm66fiK0S9ZeoSc',
+    appId: '1:356091070795:ios:8c4611a0130eeba90fc0ce',
+    messagingSenderId: '356091070795',
+    projectId: 'habittracker-252d2',
+    storageBucket: 'habittracker-252d2.appspot.com',
     iosBundleId: 'com.example.habitTracker',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyAizYrm-qLa2QnaKoult3fWlOAcVKRwDwg',
-    appId: '1:100196825462:web:596d639c516e3641d36257',
-    messagingSenderId: '100196825462',
-    projectId: 'habits-eef1f',
-    authDomain: 'habits-eef1f.firebaseapp.com',
-    storageBucket: 'habits-eef1f.appspot.com',
-    measurementId: 'G-B5CBDE8GFK',
+    apiKey: 'AIzaSyD4hgcztK4Ssg25Md8q0aVFbWocj-MJG3s',
+    appId: '1:356091070795:web:f797c00b2ef0094a0fc0ce',
+    messagingSenderId: '356091070795',
+    projectId: 'habittracker-252d2',
+    authDomain: 'habittracker-252d2.firebaseapp.com',
+    storageBucket: 'habittracker-252d2.appspot.com',
+    measurementId: 'G-4JW3CCVJRC',
   );
 
 }

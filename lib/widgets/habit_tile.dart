@@ -50,7 +50,6 @@ class HabitTile extends StatelessWidget {
                   List<bool>.from(habit.completionStatus);
               updatedCompletionStatus
                   .add(true); // Füge einen "erledigt"-Tag hinzu
-
               final updatedHabit = Habit(
                 id: habit.id,
                 name: habit.name,
@@ -62,7 +61,6 @@ class HabitTile extends StatelessWidget {
               context.read<HabitBloc>().add(UpdateHabit(updatedHabit));
             },
           ),
-          // Rückfall-Button: Erhöht die Rückfallanzahl
           IconButton(
             icon: Icon(Icons.replay, color: Colors.red),
             onPressed: () {
@@ -80,9 +78,15 @@ class HabitTile extends StatelessWidget {
           ),
           // Löschen-Button: Löscht das Habit
           IconButton(
-            icon: Icon(Icons.delete),
+            icon: Icon(Icons.edit),
             onPressed: () {
-              context.read<HabitBloc>().add(DeleteHabit(habit.id));
+              // Beim Klicken auf das Habit zur Bearbeitungsseite navigieren
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => EditHabitScreen(habit: habit),
+                ),
+              );
             },
           ),
         ],
