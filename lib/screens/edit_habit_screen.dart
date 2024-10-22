@@ -3,6 +3,7 @@ import '../models/habit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/habit_bloc.dart';
 import '../bloc/habit_event.dart';
+import 'package:intl/intl.dart'; // Für die Formatierung des Datums
 
 class EditHabitScreen extends StatefulWidget {
   final Habit habit;
@@ -17,14 +18,14 @@ class _EditHabitScreenState extends State<EditHabitScreen> {
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _nameController;
   late bool _isPositive;
-  late String _habit_id;
+  late DateTime _selectedDate;
 
   @override
   void initState() {
     super.initState();
     _nameController = TextEditingController(text: widget.habit.name);
     _isPositive = widget.habit.isPositive;
-    _habit_id = widget.habit.id;
+    _selectedDate = widget.habit.startDate;
   }
 
   @override
@@ -33,30 +34,37 @@ class _EditHabitScreenState extends State<EditHabitScreen> {
     super.dispose();
   }
 
+  // Methode zur Auswahl des Startdatums
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null && picked != _selectedDate) {
+      setState(() {
+        _selectedDate = picked;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Edit Habit'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.delete),
-            onPressed: () {
-              context.read<HabitBloc>().add(DeleteHabit(_habit_id));
-              Navigator.pop(context);
-            },
-          ),
-        ],
+        title: Text('Edit Habit'),
       ),
-      body: Form(
-        key: _formKey,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               TextFormField(
+                textAlign: TextAlign.center,
                 controller: _nameController,
-                decoration: InputDecoration(labelText: 'Habit Name'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a habit name';
@@ -65,8 +73,8 @@ class _EditHabitScreenState extends State<EditHabitScreen> {
                 },
               ),
               SizedBox(height: 20),
-              // Auswahlfeld für positive oder negative Gewohnheit
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text('Type: '),
                   DropdownButton<bool>(
@@ -84,10 +92,33 @@ class _EditHabitScreenState extends State<EditHabitScreen> {
                 ],
               ),
               SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                      'Start Date: ${DateFormat.yMMMd().format(_selectedDate)}'),
+                  IconButton(
+                    icon: Icon(Icons.calendar_today),
+                    onPressed: () => _selectDate(context),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10),
+              Text(
+                'Relapses: ${widget.habit.relapseCount}',
+                style: TextStyle(fontSize: 16),
+              ),
+              SizedBox(height: 10),
+              Text(
+                'Days completed: ${widget.habit.completionStatus.where((status) => status).length}',
+                style: TextStyle(fontSize: 16),
+              ),
+              SizedBox(height: 20),
+              // Speichern-Button
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    // Aktuelles Habit mit den geänderten Werten aktualisieren
+                    // Aktualisiertes Habit erstellen
                     final updatedHabit = Habit(
                       id: widget.habit.id,
                       name: _nameController.text,
@@ -95,8 +126,11 @@ class _EditHabitScreenState extends State<EditHabitScreen> {
                       completionStatus: widget.habit.completionStatus,
                       isPositive: _isPositive,
                       relapseCount: widget.habit.relapseCount,
+                      relapseDate: widget.habit.relapseDate,
+                      completionDate: widget.habit.completionDate,
                     );
-                    // Event zum Aktualisieren des Habits senden
+
+                    // Sende das aktualisierte Habit an den BLoC
                     context.read<HabitBloc>().add(UpdateHabit(updatedHabit));
                     Navigator.pop(context); // Zurück zum vorherigen Bildschirm
                   }

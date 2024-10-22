@@ -17,17 +17,6 @@ class HabitNavigationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Habit Tracker'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () {
-              Navigator.pushNamed(context, '/add');
-            },
-          ),
-        ],
-      ),
       body: BlocBuilder<NavigationBloc, NavigationState>(
         builder: (context, state) {
           // Zeige den aktuell ausgewählten Bildschirm basierend auf dem Zustand

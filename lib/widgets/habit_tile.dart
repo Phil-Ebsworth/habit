@@ -28,78 +28,108 @@ class HabitTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(habit.name),
-      subtitle: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Type: ${habit.isPositive ? 'Learn' : 'Unlearn'}'),
-          Text('Started: ${DateFormat.yMMMd().format(habit.startDate)}'),
-          Text('Elapsed time: ${calculateTimeSinceStart(habit.startDate)}'),
-          Text('Relapses: ${habit.relapseCount}'),
-        ],
-      ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Erledigt-Button: Markiert das Habit für den Tag als abgeschlossen
-          IconButton(
-            icon: Icon(Icons.check_circle, color: Colors.green),
-            onPressed: () {
-              final updatedCompletionStatus =
-                  List<bool>.from(habit.completionStatus);
-              updatedCompletionStatus
-                  .add(true); // Füge einen "erledigt"-Tag hinzu
-              final updatedHabit = Habit(
-                id: habit.id,
-                name: habit.name,
-                startDate: habit.startDate,
-                completionStatus: updatedCompletionStatus,
-                isPositive: habit.isPositive,
-                relapseCount: habit.relapseCount,
-              );
-              context.read<HabitBloc>().add(UpdateHabit(updatedHabit));
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.replay, color: Colors.red),
-            onPressed: () {
-              final updatedHabit = Habit(
-                id: habit.id,
-                name: habit.name,
-                startDate: habit.startDate,
-                completionStatus: habit.completionStatus,
-                isPositive: habit.isPositive,
-                relapseCount:
-                    habit.relapseCount + 1, // Erhöht die Rückfälle um 1
-              );
-              context.read<HabitBloc>().add(UpdateHabit(updatedHabit));
-            },
-          ),
-          // Löschen-Button: Löscht das Habit
-          IconButton(
-            icon: Icon(Icons.edit),
-            onPressed: () {
-              // Beim Klicken auf das Habit zur Bearbeitungsseite navigieren
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EditHabitScreen(habit: habit),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-      onTap: () {
-        // Beim Klicken auf das Habit zur Bearbeitungsseite navigieren
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => EditHabitScreen(habit: habit),
-          ),
-        );
+    return Dismissible(
+      key: Key(habit.id),
+      direction: DismissDirection.horizontal,
+      dismissThresholds: const {
+        DismissDirection.startToEnd: 0.2,
+        DismissDirection.endToStart: 0.2,
       },
+      background: Container(
+        color: Colors.red[100]?.withOpacity(0.5),
+        alignment: Alignment.centerLeft,
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: const Icon(
+          Icons.cancel_outlined,
+          color: Colors.red,
+        ),
+      ),
+      secondaryBackground: Container(
+        color: Colors.green[100]?.withOpacity(0.5),
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: const Icon(
+          Icons.check_circle,
+          color: Colors.green,
+        ),
+      ),
+      confirmDismiss: (direction) async {
+        if (direction == DismissDirection.endToStart) {
+          final updatedCompletionStatus =
+              List<bool>.from(habit.completionStatus);
+          updatedCompletionStatus.add(true);
+          final updatedHabit = Habit(
+            id: habit.id,
+            name: habit.name,
+            startDate: habit.startDate,
+            completionStatus: updatedCompletionStatus,
+            isPositive: habit.isPositive,
+            relapseCount: habit.relapseCount,
+            relapseDate: habit.relapseDate,
+            completionDate: DateTime.now(),
+          );
+          context.read<HabitBloc>().add(UpdateHabit(updatedHabit));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Habit completed')),
+          );
+          return false; // Prevent deletion
+        } else if (direction == DismissDirection.startToEnd) {
+          final updatedCompletionStatus =
+              List<bool>.from(habit.completionStatus);
+          updatedCompletionStatus.add(false);
+          final updatedHabit = Habit(
+            id: habit.id,
+            name: habit.name,
+            startDate: habit.startDate,
+            completionStatus: updatedCompletionStatus,
+            isPositive: habit.isPositive,
+            relapseCount: habit.relapseCount,
+            relapseDate: DateTime.now(),
+            completionDate: habit.completionDate,
+          );
+          context.read<HabitBloc>().add(UpdateHabit(updatedHabit));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Habit relapsed')),
+          );
+          return false;
+        }
+        return false;
+      },
+      child: Card(
+        color: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        elevation: 2,
+        child: ListTile(
+          tileColor: habit.completionDate.day == DateTime.now().day
+              ? Colors.green[100]?.withOpacity(0.5)
+              : habit.relapseDate.day == DateTime.now().day
+                  ? Colors.red[100]?.withOpacity(0.5)
+                  : Colors.transparent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          title: Text(habit.name),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Type: ${habit.isPositive ? 'Learn' : 'Unlearn'}'),
+              Text('Started: ${DateFormat.yMMMd().format(habit.startDate)}'),
+              Text('Elapsed time: ${calculateTimeSinceStart(habit.startDate)}'),
+              Text('Relapses: ${habit.relapseCount}'),
+            ],
+          ),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => EditHabitScreen(habit: habit),
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
 }

@@ -67,7 +67,9 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                       name: _nameController.text,
                       startDate: DateTime.now(),
                       completionStatus: [],
-                      isPositive: _isPositive, // Gewohnheitstyp
+                      isPositive: _isPositive,
+                      relapseDate: DateTime(0),
+                      completionDate: DateTime(0),
                     );
                     // Event zum Hinzufügen der Gewohnheit senden
                     context.read<HabitBloc>().add(AddHabit(newHabit));

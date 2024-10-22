@@ -2,8 +2,10 @@ class Habit {
   final String id;
   final String name;
   final DateTime startDate;
+  final DateTime relapseDate;
   final List<bool> completionStatus;
-  final bool isPositive; // Neues Feld für positive oder negative Gewohnheiten
+  final DateTime completionDate;
+  final bool isPositive;
   int relapseCount;
 
   Habit({
@@ -11,7 +13,9 @@ class Habit {
     required this.name,
     required this.startDate,
     required this.completionStatus,
-    required this.isPositive, // Muss jetzt beim Erstellen angegeben werden
+    required this.isPositive,
+    required this.relapseDate,
+    required this.completionDate,
     this.relapseCount = 0,
   });
 
@@ -20,8 +24,10 @@ class Habit {
       'name': name,
       'startDate': startDate.toIso8601String(),
       'completionStatus': completionStatus.map((e) => e ? 1 : 0).toList(),
-      'isPositive': isPositive, // Speichert, ob die Gewohnheit positiv ist
+      'completionDate': completionDate.toIso8601String(),
+      'isPositive': isPositive,
       'relapseCount': relapseCount,
+      'relapseDate': relapseDate.toIso8601String(),
     };
   }
 
@@ -32,9 +38,11 @@ class Habit {
       startDate: DateTime.parse(map['startDate']),
       completionStatus: List<bool>.from(
           map['completionStatus'].map((e) => e == 1 ? true : false)),
+      completionDate: DateTime.parse(map['completionDate']),
       isPositive:
           map['isPositive'] ?? true, // Standardmäßig positive Gewohnheit
       relapseCount: map['relapseCount'] ?? 0,
+      relapseDate: DateTime.parse(map['relapseDate']),
     );
   }
 }

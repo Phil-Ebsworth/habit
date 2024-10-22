@@ -12,7 +12,15 @@ class NegativeHabitsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Negative Habits'),
+        title: const Text('Bad Habits'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              Navigator.pushNamed(context, '/add');
+            },
+          ),
+        ],
       ),
       body: BlocBuilder<HabitBloc, HabitState>(
         builder: (context, state) {
