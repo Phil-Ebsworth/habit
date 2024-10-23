@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:habit_tracker/screens/home_screen.dart';
 import '../bloc/navigation_bloc.dart'; // Importiere den Navigation BLoC
 import '../bloc/navigation_event.dart';
 import '../bloc/navigation_state.dart';
@@ -9,7 +10,8 @@ import 'negative_habit_screen.dart';
 class HabitNavigationScreen extends StatelessWidget {
   static final List<Widget> _widgetOptions = <Widget>[
     PositiveHabitsScreen(), // Bildschirm für positive Gewohnheiten
-    NegativeHabitsScreen(), // Bildschirm für negative Gewohnheiten
+    NegativeHabitsScreen(),
+    HomeScreenWithCalendar() // Bildschirm für negative Gewohnheiten
   ];
 
   const HabitNavigationScreen({super.key});
@@ -36,6 +38,11 @@ class HabitNavigationScreen extends StatelessWidget {
                 icon: Icon(
                     Icons.arrow_downward), // Symbol für negative Gewohnheiten
                 label: 'Unlearn Habits',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(
+                    Icons.arrow_downward), // Symbol für negative Gewohnheiten
+                label: 'kalendar',
               ),
             ],
             currentIndex: state.selectedTabIndex,
