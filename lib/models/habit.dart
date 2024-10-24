@@ -45,4 +45,26 @@ class Habit {
       relapseDate: DateTime.parse(map['relapseDate']),
     );
   }
+
+  Habit copyWith({
+    String? id,
+    String? name,
+    DateTime? startDate,
+    List<bool>? completionStatus,
+    bool? isPositive,
+    DateTime? relapseDate,
+    DateTime? completionDate,
+    int? relapseCount,
+  }) {
+    return Habit(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      startDate: startDate ?? this.startDate,
+      completionStatus: completionStatus ?? this.completionStatus,
+      isPositive: isPositive ?? this.isPositive,
+      relapseDate: relapseDate ?? this.relapseDate,
+      completionDate: completionDate ?? this.completionDate,
+      relapseCount: relapseCount ?? this.relapseCount,
+    );
+  }
 }
